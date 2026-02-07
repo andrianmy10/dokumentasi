@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 4.5 Years, Rara ❤️</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Great+Vibes&family=Varela+Round&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --cinnamoroll-blue: #b3e5fc;
+            --cinnamoroll-dark: #5cace2;
+            --cinnamoroll-white: #ffffff;
+            --soft-pink: #f8bbd0;
+            --sky-gradient: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 50%, #81d4fa 100%);
+        }
+
+        html { scroll-behavior: auto; }
+        body {
+            background: var(--sky-gradient);
+            margin: 0; 
+            font-family: 'Poppins', sans-serif; 
+            color: #455a64;
+            overflow-x: hidden; 
+            height: 100vh;
+            overflow-y: scroll; 
+            scroll-snap-type: y mandatory;
+        }
+
+        /* CLOUD BACKGROUND */
+        .clouds-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+        }
+        .cloud {
+            position: absolute; background: white; border-radius: 50px;
+            opacity: 0.7; filter: blur(20px);
+            animation: floatCloud var(--duration) infinite ease-in-out;
+        }
+        @keyframes floatCloud {
+            0%, 100% { transform: translateX(0) scale(1); }
+            50% { transform: translateX(30px) scale(1.1); }
+        }
+
+        /* ANIMASI CINNAMOROLL TERBANG - SIZE UP */
+        .cinnamoroll-fly {
+            width: 200px; /* Diperbesar dari 160px */
+            height: auto;
+            display: block;
+            margin: 0 auto 15px;
+            z-index: 50;
+            animation: flyingCinna 3.5s ease-in-out infinite alternate;
+            filter: drop-shadow(0 15px 20px rgba(0,0,0,0.1));
+        }
+
+        @keyframes flyingCinna {
+            0% { transform: translateY(10px) rotate(-3deg); }
+            100% { transform: translateY(-20px) rotate(3deg); }
+        }
+
+        /* SECTION CONFIG */
+        section {
+            height: 100vh; width: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            scroll-snap-align: start; position: relative; padding: 20px;
+        }
+
+        /* SPLASH SCREEN */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--sky-gradient);
+            z-index: 9999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+        }
+        #splash-text {
+            margin-top: 25px; font-family: 'Varela Round', sans-serif;
+            font-size: 1.5rem; color: var(--cinnamoroll-dark); font-weight: bold;
+            text-shadow: 0 2px 4px rgba(255,255,255,0.5);
+        }
+
+        /* GLASS CONTAINER - ZOOM IN SIZE */
+        .glass-container {
+            position: relative; z-index: 20; 
+            background: rgba(255, 255, 255, 0.75); 
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 3.5rem; /* Padding diperbesar */
+            border-radius: 50px; /* Radius lebih soft/bulat */
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            text-align: center; box-shadow: 0 20px 45px rgba(129, 212, 250, 0.25);
+            max-width: 900px; /* Diperlebar agar tidak nanggung */
+            width: 100%;
+        }
+
+        /* HERO STYLES - FONT SIZE UP */
+        .hero-container { max-width: 700px; opacity: 0; transform: translateY(30px); }
+        h1 {
+            font-family: 'Great Vibes', cursive; font-size: 4.5rem; margin-bottom: 1rem;
+            color: var(--cinnamoroll-dark); text-shadow: 3px 3px 0px white;
+        }
+        .subtitle { font-size: 1.25rem; font-weight: 400; margin-bottom: 2rem; color: #607d8b; line-height: 1.6; }
+        
+        .counter-box { display: flex; justify-content: center; gap: 20px; margin-bottom: 2.5rem; }
+        .time-unit { 
+            background: white; padding: 18px; border-radius: 25px; 
+            min-width: 110px; opacity: 0;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            border-bottom: 5px solid var(--cinnamoroll-blue);
+        }
+        .time-unit span { display: block; font-weight: 600; font-size: 2.2rem; color: var(--cinnamoroll-dark); }
+        .time-unit label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; color: #90a4ae; }
+        
+        .love-btn {
+            background: linear-gradient(45deg, #81d4fa, #4fc3f7); border: none; padding: 18px 55px; border-radius: 50px;
+            color: white; font-size: 1.25rem; font-weight: 600; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 10px 25px rgba(79, 195, 247, 0.4); display: flex; align-items: center; justify-content: center;
+            gap: 12px; margin: 0 auto; outline: none; position: relative; z-index: 30;
+        }
+
+        .hidden-msg { margin-top: 20px; font-size: 1.1rem; opacity: 0; height: 0; overflow: hidden; transition: all 0.5s ease; color: #455a64; line-height: 1.6; }
+        .hidden-msg.show { opacity: 1; height: auto; margin-top: 20px; }
+
+        /* PROFILE STYLES - BIGGER CARDS */
+        .profile-wrapper { display: flex; flex-direction: column; align-items: center; gap: 2.5rem; width: 100%; max-width: 1000px; }
+        .profile-card { 
+            display: flex; flex-direction: row; align-items: center; 
+            text-align: left; width: 100%; gap: 2.5rem; padding: 3rem; 
+            visibility: hidden; 
+        }
+        .profile-card.reverse { flex-direction: row-reverse; text-align: right; }
+        
+        .profile-img-box {
+            flex-shrink: 0; width: 180px; height: 180px; border-radius: 50%; padding: 8px;
+            background: white; box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border: 4px dashed var(--cinnamoroll-blue);
+        }
+        .profile-img-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        .profile-content h3 { font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--cinnamoroll-dark); font-family: 'Great Vibes', cursive; }
+        .profile-content p { font-weight: 400; line-height: 1.7; font-size: 1.1rem; color: #546e7a; }
+
+        /* GALLERY 3x3 GRID - MORE SPACING & SIZE */
+        .gallery-wrapper { 
+            width: 100%; max-width: 1100px; 
+            height: 100%; display: flex; flex-direction: column; 
+        }
+        .gallery-header { text-align: center; margin-bottom: 20px; flex-shrink: 0; }
+        .gallery-title { font-family: 'Great Vibes', cursive; font-size: 4rem; color: var(--cinnamoroll-dark); }
+        .gallery-sub { font-size: 1rem; color: #78909c; letter-spacing: 1.2px; }
+
+        .scroll-content-area {
+            flex-grow: 1; overflow-y: auto; padding: 20px;
+            scrollbar-width: none;
+            mask-image: linear-gradient(to bottom, transparent, black 8%, black 92%, transparent);
+            -webkit-mask-image: linear-gradient(to bottom, transparent, black 8%, black 92%, transparent);
+        }
+        .scroll-content-area::-webkit-scrollbar { display: none; }
+
+        .gallery-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 20px; 
+            width: 100%;
+            margin-bottom: 60px;
+        }
+        .gallery-item {
+            aspect-ratio: 1/1; border-radius: 20px; overflow: hidden;
+            border: 5px solid white; background: white; cursor: zoom-in;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .gallery-item:hover { transform: scale(1.08) rotate(1deg); z-index: 5; border-color: var(--cinnamoroll-blue); }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        /* WISHES TIMELINE (SYMMETRICAL) - ZOOMED */
+        .wishes-timeline {
+            position: relative; width: 100%;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 400px;
+        }
+        .timeline-line {
+            position: absolute; left: 50%; top: 0; bottom: 0;
+            width: 5px; background: var(--cinnamoroll-dark);
+            transform: translateX(-50%); opacity: 0.5; border-radius: 10px;
+        }
+        .timeline-heart-marker {
+            position: sticky; top: 40%;
+            background: #e3f2fd; padding: 12px; border-radius: 50%;
+            font-size: 1.5rem; color: var(--cinnamoroll-dark); 
+            z-index: 10; margin: 30px 0; border: 3px solid white;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        .wish-cloud-container {
+            width: 100%; display: flex; margin-bottom: 35px; position: relative; z-index: 5;
+        }
+        .wish-cloud-container.left { 
+            justify-content: flex-end; 
+            padding-right: calc(50% + 25px); 
+            padding-left: 20px;
+        }
+        .wish-cloud-container.right { 
+            justify-content: flex-start; 
+            padding-left: calc(50% + 25px); 
+            padding-right: 20px;
+        }
+
+        .wish-cloud {
+            background: white; padding: 18px 25px; border-radius: 30px;
+            border: 3px solid var(--cinnamoroll-dark); position: relative;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+            font-size: 1rem; color: var(--cinnamoroll-dark); font-weight: 600;
+            text-align: center; line-height: 1.5;
+            animation: floatAnim 4s infinite ease-in-out;
+            width: fit-content; max-width: 100%; 
+            word-wrap: break-word; overflow-wrap: break-word; white-space: normal;
+        }
+
+        .wish-cloud::after {
+            content: ''; position: absolute;
+            width: 12px; height: 12px; background: white;
+            bottom: 12px; transform: rotate(-45deg);
+        }
+        .left .wish-cloud::after { 
+            right: -8px; 
+            border-bottom: 3px solid var(--cinnamoroll-dark); 
+            border-right: 3px solid var(--cinnamoroll-dark); 
+        }
+        .right .wish-cloud::after { 
+            left: -8px; 
+            border-top: 3px solid var(--cinnamoroll-dark); 
+            border-left: 3px solid var(--cinnamoroll-dark); 
+        }
+
+        /* MUSIC CONTROLLER */
+        #music-control {
+            position: fixed; top: 25px; right: 25px;
+            background: white; border: 3px solid var(--cinnamoroll-blue);
+            width: 50px; height: 50px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; z-index: 10001; font-size: 1.5rem;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1); transition: 0.3s;
+        }
+
+        /* MODALS - LARGER */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(179, 229, 252, 0.65); backdrop-filter: blur(12px);
+            z-index: 10000; display: none; justify-content: center; align-items: center;
+            opacity: 0; padding: 25px;
+        }
+        .modal-content {
+            background: white; padding: 25px; border-radius: 40px;
+            max-width: 550px; width: 100%; position: relative;
+            transform: scale(0.8); box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+        }
+        .modal-img { width: 100%; border-radius: 25px; border: 4px solid var(--cinnamoroll-blue); margin-bottom: 15px; }
+        .modal-caption { text-align: center; font-size: 1.1rem; color: var(--cinnamoroll-dark); font-weight: 600; padding: 0 10px; }
+        .close-modal {
+            position: absolute; top: -15px; right: -15px; background: var(--cinnamoroll-dark);
+            color: white; width: 40px; height: 40px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; cursor: pointer; border: 3px solid white;
+        }
+
+        /* FORM */
+        .wish-input {
+            width: 100%; padding: 18px; border-radius: 20px; border: 3px solid var(--cinnamoroll-blue);
+            font-family: inherit; outline: none; margin-bottom: 20px; resize: none; font-size: 1.1rem;
+        }
+        .submit-wish-btn {
+            width: 100%; background: var(--cinnamoroll-dark); color: white; border: none;
+            padding: 15px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 1.1rem;
+        }
+
+        .sticky-footer { width: 100%; display: flex; flex-direction: column; align-items: center; padding: 25px 0; flex-shrink: 0; }
+        .final-btn {
+            background: var(--cinnamoroll-dark); color: white; padding: 16px 50px;
+            border-radius: 50px; border: none; font-weight: 600; cursor: pointer; font-size: 1.1rem;
+            box-shadow: 0 12px 30px rgba(92, 172, 226, 0.4);
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 3rem; }
+            .subtitle { font-size: 1.1rem; }
+            .glass-container { padding: 2rem 1.5rem; }
+            .profile-card, .profile-card.reverse { flex-direction: column; text-align: center; padding: 2rem 1.5rem; }
+            .profile-img-box { width: 150px; height: 150px; }
+            .profile-content h3 { font-size: 2.2rem; }
+            
+            .timeline-line { left: 50% !important; transform: translateX(-50%) !important; }
+            .timeline-heart-marker { left: 50% !important; transform: translateX(-50%) !important; }
+            
+            .wish-cloud-container.left { padding-right: calc(50% + 10px) !important; padding-left: 5px !important; }
+            .wish-cloud-container.right { padding-left: calc(50% + 10px) !important; padding-right: 5px !important; }
+            .wish-cloud { font-size: 0.85rem; padding: 12px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BACKGROUND MUSIC -->
+    <audio id="bgMusic" loop>
+        <source src="https://raw.githubusercontent.com/andrianmy10/dokumentasi/main/musik.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- MUSIC TOGGLE BUTTON -->
+    <div id="music-control">🔊</div>
+
+    <!-- SPLASH SCREEN -->
+    <div id="splash-screen">
+        <img src="https://raw.githubusercontent.com/andrianmy10/dokumentasi/main/Cinnamoroll.png" alt="Loading" class="cinnamoroll-fly" style="width: 250px;">
+        <div id="splash-text">Memuat Kenangan Manis... ✨</div>
+    </div>
+
+    <div class="clouds-container" id="clouds"></div>
+
+    <!-- Gallery Modal -->
+    <div class="modal-overlay" id="galleryModal">
+        <div class="modal-content" id="modalBox">
+            <div class="close-modal" id="closeModal">✕</div>
+            <img src="" alt="View" class="modal-img" id="modalImg">
+            <div class="modal-caption" id="modalCaption"></div>
+        </div>
+    </div>
+
+    <!-- Wish Modal -->
+    <div class="modal-overlay" id="wishModal">
+        <div class="modal-content" id="wishModalBox">
+            <div class="close-modal" id="closeWishModal">✕</div>
+            <h3 style="color: var(--cinnamoroll-dark); margin-bottom: 20px; text-align: center; font-family: 'Great Vibes', cursive; font-size: 3rem;">✨ Harapan Kita ✨</h3>
+            <textarea class="wish-input" id="wishInput" rows="4" placeholder="Tulis harapanmu untuk kita di sini ya sayang..."></textarea>
+            <button class="submit-wish-btn" id="submitWishBtn">Simpan di Awan Harapan</button>
+        </div>
+    </div>
+
+    <section id="page1">
+        <div class="glass-container hero-container">
+            <img src="https://raw.githubusercontent.com/andrianmy10/dokumentasi/main/Cinnamoroll.png" alt="Cinnamoroll Terbang" class="cinnamoroll-fly">
+            
+            <h1>Happy 4.5 Years</h1>
+            <p class="subtitle">Halo Rara Cantik! Terima kasih sudah bertahan sejauh ini dan selalu jadi alasan Aa untuk terus berjuang setiap hari.</p>
+            <div class="counter-box">
+                <div class="time-unit"><span id="years">4</span><label>Tahun</label></div>
+                <div class="time-unit"><span id="months">6</span><label>Bulan</label></div>
+                <div class="time-unit"><span id="days">...</span><label>Hari</label></div>
+            </div>
+            <div class="hidden-msg" id="secretMsg">
+                Aa sayang banget sama kamu, Ra. <br> Apapun badainya, jangan pernah lepas tangan Aa ya? Kita lewatin semuanya bareng-bareng.
+            </div>
+            <button class="love-btn" id="confettiBtn">☁️ Sayang Aa Terus?</button>
+        </div>
+    </section>
+
+    <section id="page2">
+        <div class="profile-wrapper">
+            <!-- Profile Aa -->
+            <div class="glass-container profile-card sr-card">
+                <div class="profile-img-box">
+                    <img src="https://raw.githubusercontent.com/andrianmy10/dokumentasi/main/aa.jpeg" alt="Aa Andrian">
+                </div>
+                <div class="profile-content">
+                    <h3>Andrian Maulana Yusuf</h3>
+                    <p>Si paling logis yang kadang kaku, tapi sebenarnya cuma ingin memastikan masa depan Rara aman. Lagi belajar buat dengerin pakai hati demi kebahagiaan kamu.</p>
+                </div>
+            </div>
+            
+            <!-- Profile Rara -->
+            <div class="glass-container profile-card reverse sr-card">
+                <div class="profile-img-box">
+                    <img src="https://raw.githubusercontent.com/andrianmy10/dokumentasi/main/yaya.jpeg" alt="Rara Cantik">
+                </div>
+                <div class="profile-content">
+                    <h3>Chehra Nabilah Maharani</h3>
+                    <p>Gadis paling hebat dan tangguh yang hatinya selembut awan. Senyum kamu adalah moodbooster Aa paling ampuh di dunia ini!</p>
+                </div>
+            </div>
+            
+            <button class="gallery-trigger-btn" style="background: white; border: 3px solid var(--cinnamoroll-blue); padding: 15px 40px; border-radius: 50px; cursor: pointer; color: var(--cinnamoroll-dark); font-weight: 600; font-size: 1.1rem; margin-top: 10px;" onclick="smoothScroll('#page3', 2000)">☁️ Buka Album Kenangan 👇</button>
+        </div>
+    </section>
+
+    <section id="page3">
+        <div class="gallery-wrapper">
+            <div class="gallery-header">
+                <h2 class="gallery-title">Memories</h2>
+                <p class="gallery-sub">9 Momen Indah & Awan Harapan Kita</p>
+            </div>
+            <div class="scroll-content-area">
+                <div class="gallery-grid">
+                    <div class="gallery-item" data-desc="Momen manis kita yang pertama."><img src="https://raw.githubusercontent.com/andrianmy10/dokumentasi/main/1.jpeg" alt="Memory 1"></div>
+                    <div class="gallery-item" data-desc="Senyum favorit Aa yang selalu bikin tenang."><img src="https://raw.githubusercontent.com/andrianmy10/dokumentasi/main/2.jpeg" alt="Memory 2"></div>
+                    <div class="gallery-item" data-desc="Terima kasih ya sudah bertahan bersama Aa."><img src="https://raw.githubusercontent.com/andrianmy10/dokumentasi/main/3.jpeg" alt="Memory 3"></div>
+                    <div class="gallery-item" data-desc="Dunia serasa milik kita berdua saja."><img src="https://raw.githubusercontent.com/andrianmy10/dokumentasi/main/4.jpeg" alt="Memory 4"></div>
+                    <div class="gallery-item" data-desc="Langgeng terus ya sayang sampai nanti."><img src="https://raw.githubusercontent.com/andrianmy10/dokumentasi/main/5.jpeg" alt="Memory 5"></div>
+                    <div class="gallery-item" data-desc="Kamu adalah segalanya bagi Aa."><img src="https://raw.githubusercontent.com/andrianmy10/dokumentasi/main/6.jpeg" alt="Memory 6"></div>
+                    <div class="gallery-item" data-desc="Masa depan indah sudah menanti kita."><img src="https://raw.githubusercontent.com/andrianmy10/dokumentasi/main/7.jpeg" alt="Memory 7"></div>
+                    <div class="gallery-item" data-desc="I Love You 3000, Rara! ❤️"><img src="https://raw.githubusercontent.com/andrianmy10/dokumentasi/main/8.jpeg" alt="Memory 8"></div>
+                    <div class="gallery-item" data-desc="Selamanya bersamamu adalah impian Aa."><img src="https://raw.githubusercontent.com/andrianmy10/dokumentasi/main/9.png" alt="Memory 9"></div>
+                </div>
+
+                <div class="wishes-timeline" id="wishes-timeline">
+                    <div class="timeline-line"></div>
+                    <div class="timeline-heart-marker">🤍</div>
+                    <div id="wishes-display" style="width: 100%;"></div>
+                </div>
+            </div>
+
+            <div class="sticky-footer">
+                <button class="final-btn" id="openWishBtn">✨ Tulis Harapan Kita</button>
+            </div>
+        </div>
+    </section>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const configRaw = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'anniv-local-app';
+        let db = null; let auth = null;
+
+        if (configRaw) {
+            try {
+                const firebaseConfig = JSON.parse(configRaw);
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app); db = getFirestore(app);
+                const initAuth = async () => {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else { await signInAnonymously(auth); }
+                };
+                initAuth();
+                onAuthStateChanged(auth, (user) => { if (user) loadWishes(); });
+            } catch(e) { setupLocalMode(); }
+        } else {
+            setupLocalMode();
+        }
+
+        function setupLocalMode() { loadWishes(); }
+
+        function loadWishes() {
+            if (db) {
+                const wishesCol = collection(db, 'artifacts', appId, 'public', 'data', 'wishes');
+                onSnapshot(wishesCol, (snap) => {
+                    const data = snap.docs.map(doc => doc.data());
+                    renderWishes(data);
+                });
+            } else {
+                const localWishes = JSON.parse(localStorage.getItem('cinnamoroll_wishes') || '[]');
+                renderWishes(localWishes);
+            }
+        }
+
+        function renderWishes(wishes) {
+            const display = document.getElementById('wishes-display');
+            display.innerHTML = "";
+            if (wishes.length === 0) {
+                display.innerHTML = '<div style="text-align:center; color:#78909c; font-style:italic; padding: 20px; font-size: 1.1rem;">Awan harapan masih kosong... ☁️</div>';
+                return;
+            }
+            const sorted = wishes.sort((a, b) => {
+                const timeA = a.createdAt?.seconds || a.localTime || 0;
+                const timeB = b.createdAt?.seconds || b.localTime || 0;
+                return timeB - timeA;
+            });
+            sorted.forEach((wish, index) => {
+                const container = document.createElement('div');
+                const side = index % 2 === 0 ? 'left' : 'right';
+                container.className = `wish-cloud-container ${side}`;
+                container.innerHTML = `<div class="wish-cloud">${wish.text}</div>`;
+                display.appendChild(container);
+            });
+        }
+
+        document.getElementById('submitWishBtn').onclick = async () => {
+            const input = document.getElementById('wishInput');
+            const val = input.value.trim();
+            if (!val) return;
+            if (db) {
+                try { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'wishes'), { text: val, createdAt: serverTimestamp() });
+                } catch(e) { saveLocally(val); }
+            } else { saveLocally(val); }
+            input.value = ""; window.closeWishModalFunc();
+        };
+
+        function saveLocally(text) {
+            const localWishes = JSON.parse(localStorage.getItem('cinnamoroll_wishes') || '[]');
+            localWishes.push({ text: text, localTime: Date.now() });
+            localStorage.setItem('cinnamoroll_wishes', JSON.stringify(localWishes));
+            renderWishes(localWishes);
+        }
+    </script>
+
+    <script>
+        const bgMusic = document.getElementById('bgMusic');
+        const musicControl = document.getElementById('music-control');
+
+        const playMusic = () => {
+            bgMusic.play().then(() => {
+                musicControl.innerText = "🔊";
+                document.removeEventListener('click', playMusic);
+                document.removeEventListener('touchstart', playMusic);
+            }).catch(e => {});
+        };
+
+        document.addEventListener('click', playMusic);
+        document.addEventListener('touchstart', playMusic);
+
+        musicControl.onclick = (e) => {
+            e.stopPropagation();
+            if (bgMusic.paused) {
+                bgMusic.play();
+                musicControl.innerText = "🔊";
+            } else {
+                bgMusic.pause();
+                musicControl.innerText = "🔇";
+            }
+        };
+
+        window.smoothScroll = (t, dur) => {
+            const el = document.querySelector(t);
+            const pos = el.getBoundingClientRect().top + window.scrollY;
+            const start = window.scrollY;
+            let startT = null;
+            function anim(now) {
+                if (!startT) startT = now;
+                const elapsed = now - startT;
+                const run = ease(elapsed, start, pos - start, dur);
+                window.scrollTo(0, run);
+                if (elapsed < dur) requestAnimationFrame(anim);
+            }
+            const ease = (t, b, c, d) => { t /= d / 2; if (t < 1) return c / 2 * t * t + b; t--; return -c / 2 * (t * (t - 2) - 1) + b; };
+            requestAnimationFrame(anim);
+        };
+
+        window.onload = () => {
+            const diff = Math.ceil(Math.abs(new Date() - new Date('2021-08-07')) / (1000 * 60 * 60 * 24));
+            document.getElementById('days').innerText = diff;
+            for(let i=0; i<18; i++) {
+                const c = document.createElement('div'); c.className = 'cloud';
+                c.style.width = Math.random()*120+60+'px'; c.style.height = '60px';
+                c.style.left = Math.random()*100+'%'; c.style.top = Math.random()*100+'%';
+                c.style.setProperty('--duration', Math.random()*6+6+'s');
+                document.getElementById('clouds').appendChild(c);
+            }
+            setTimeout(() => {
+                gsap.to("#splash-screen", { duration: 1.2, y: "-100%", ease: "power4.inOut", onComplete: () => {
+                    document.getElementById("splash-screen").style.display = "none";
+                    gsap.to(".hero-container", { opacity: 1, y: 0, duration: 1.5, ease: "power3.out" });
+                    gsap.to(".time-unit", { opacity: 1, y: 0, stagger: 0.15, duration: 1.2, ease: "back.out(1.7)" });
+                }});
+            }, 3000);
+        };
+
+        document.getElementById('confettiBtn').onclick = function() {
+            bgMusic.play(); 
+            confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 }, colors: ['#b3e5fc', '#ffffff', '#f8bbd0'] });
+            document.getElementById('secretMsg').classList.add('show');
+            this.disabled = true; this.innerText = "✨ I Love You Too!";
+            setTimeout(() => smoothScroll('#page2', 2000), 2500);
+        };
+
+        const gModal = document.getElementById('galleryModal');
+        const wModal = document.getElementById('wishModal');
+
+        document.querySelectorAll('.gallery-item').forEach(it => {
+            it.onclick = () => {
+                document.getElementById('modalImg').src = it.querySelector('img').src;
+                document.getElementById('modalCaption').innerText = it.getAttribute('data-desc');
+                gModal.style.display = 'flex';
+                gsap.to(gModal, { opacity: 1, duration: 0.3 });
+                gsap.fromTo("#modalBox", { scale: 0.8 }, { scale: 1, duration: 0.4, ease: "back.out" });
+            };
+        });
+
+        document.getElementById('openWishBtn').onclick = () => {
+            wModal.style.display = 'flex';
+            gsap.to(wModal, { opacity: 1, duration: 0.3 });
+            gsap.fromTo("#wishModalBox", { scale: 0.8 }, { scale: 1, duration: 0.4, ease: "back.out" });
+        };
+
+        window.closeWishModalFunc = () => {
+            gsap.to(wModal, { opacity: 0, duration: 0.3, onComplete: () => wModal.style.display='none' });
+        };
+
+        document.getElementById('closeModal').onclick = () => gsap.to(gModal, { opacity: 0, duration: 0.3, onComplete: () => gModal.style.display='none' });
+        document.getElementById('closeWishModal').onclick = closeWishModalFunc;
+
+        ScrollReveal().reveal('.sr-card', { origin: 'bottom', distance: '40px', duration: 1200, delay: 200 });
+    </script>
+</body>
+</html>
